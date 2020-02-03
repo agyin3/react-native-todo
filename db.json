@@ -1,0 +1,24 @@
+{
+  "todos": [
+    {
+      "name": "Lakers Game",
+      "id": 1
+    },
+    {
+      "name": "Clean Room",
+      "id": 2
+    },
+    {
+      "name": "Have Fun",
+      "id": 3
+    },
+    {
+      "name": "Make Dinner",
+      "id": 4
+    },
+    {
+      "name": "Iron Clothes",
+      "id": 5
+    }
+  ]
+}
