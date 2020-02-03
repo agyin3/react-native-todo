@@ -1,18 +1,33 @@
-import React, { useState } from 'react';
-import { StyleSheet, Text, View, TextInput, TouchableOpacity, Dimensions, Switch } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { StyleSheet, Text, View, TextInput, TouchableOpacity, Dimensions } from 'react-native';
+import axios from 'axios'
 
 const {height, width} = Dimensions.get('window')
 export default function App() {
-  const [todos, setTodos] = useState(['React Native Tutorial'])
+  const [todos, setTodos] = useState([])
   const [newTodo, setNewTodo] = useState()
+
+  const fetchData = () => {
+    axios.get('http://localhost:3000/todos')
+    .then(res => setTodos(res.data))
+    .catch(err => console.log(err))
+  }
+
+  useEffect(() => {
+    fetchData()
+  }, [])
 
   const handleChange = text => {
     setNewTodo(text)
   }
 
   const handlePress = e => {
-    const newTodos = [...todos, newTodo]
-    setTodos(newTodos)
+    axios.post('http://localhost:3000/todos', {
+      name: newTodo
+    })
+    .then(res => console.log(res))
+    .catch(err => console.log(err))
+    fetchData()
     setNewTodo('')
   }
   return (
@@ -26,7 +41,7 @@ export default function App() {
       <View style={styles.todos}>
         {todos.map((todo, index) => (
           <View key={index} style={styles.textContainer}>
-            <Text style={styles.todoText}>{todo}</Text>
+            <Text style={styles.todoText}>{todo.name}</Text>
           </View>
         ))}
       </View>
