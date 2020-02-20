@@ -15,3 +15,32 @@ export const fetchData = () => dispatch => {
         dispatch({type: FETCH_POSTS_FAIL})
     })
 }
+
+export const postData = (todo) => dispatch => {
+    dispatch({type: FETCH_POSTS})
+    axios.all([
+        axios.post('http://localhost:3000/todos', todo),
+        axios.get('http://localhost:3000/todos')
+      ])
+      .then(axios.spread((post, get) => {
+        console.log(post)
+        dispatch({type: FETCH_POSTS_COMPLETE, payload: get.data})
+      }))
+      .catch(err => {
+        dispatch({type: FETCH_POSTS_FAIL})
+      })
+}
+
+export const toggleComplete = (todo, id) => dispatch => {
+    axios.all([
+        axios.put(`http://localhost:3000/todos/${id}`, todo),
+        axios.get('http://localhost:3000/todos')
+      ])
+      .then(axios.spread((post, get) => {
+        console.log(post)
+        dispatch({type: FETCH_POSTS_COMPLETE, payload: get.data})
+      }))
+      .catch(err => {
+        dispatch({type: FETCH_POSTS_FAIL})
+      })
+} 
