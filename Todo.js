@@ -40,6 +40,7 @@ function Todo(props) {
 
   return (
     <View style={styles.container}>
+      <Text style={styles.heroText}>Todo List</Text>
       <View style={styles.inputContainer}>
         <TextInput style={styles.input} onChangeText={handleChange} value={newTodo} />
         <TouchableOpacity style={styles.button} onPress={handleSubmit}>
@@ -51,8 +52,8 @@ function Todo(props) {
           <Animatable.View animation={'fadeIn'} key={todo.id} style={[styles.textContainer, todo.completed ? styles.completed : '']}>
             <Text style={[styles.todoText, todo.completed ? styles.strikeThrough : '']}>{todo.name}</Text>
             <View style={styles.iconContainer}>
-              <FontAwesomeIcon icon={faCheckSquare} size={24} onPress={() => toggleComplete(todo)} />
-              <FontAwesomeIcon icon={faTrash} size={24} onPress={() => props.removeTasks(todo.id)} />
+              <FontAwesomeIcon icon={faCheckSquare} style={{color: '#0f4c75'}} size={24} onPress={() => toggleComplete(todo)} />
+              <FontAwesomeIcon icon={faTrash} size={24} style={{color: '#0f4c75'}} onPress={() => props.removeTask(todo.id)} />
             </View>
           </Animatable.View>
         ))}
@@ -80,14 +81,19 @@ export default connect(
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: '#bbe1fa',
     alignItems: 'center',
     paddingTop: 100
+  },
+  heroText: {
+    fontSize: 35,
+    color: '#272727',
+    marginBottom: 30
   },
   inputContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'center',
+    alignItems: 'flex-end',
     paddingLeft:  20,
     paddingRight: 20,
     marginBottom: 40
@@ -97,16 +103,17 @@ const styles = StyleSheet.create({
     height: 50,
     borderRadius: 4,
     borderBottomWidth: 2,
-    borderBottomColor: 'aqua',
+    borderBottomColor: '#1b262c',
     marginRight: 10,
     fontSize: 24,
+    color: '#1b262c'
   }, 
   button: {
     flex: 0.3,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#ef2345',
-    height: 50,
+    backgroundColor: '#3282b8',
+    height: 35,
     borderRadius: 10
   },
   buttonText: {
@@ -119,19 +126,23 @@ const styles = StyleSheet.create({
   textContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
+    alignItems: 'center',
     borderBottomWidth: 3,
-    borderBottomColor: 'green',
+    borderBottomColor: '#1b262c',
     borderRadius: 5,
     marginBottom: 15,
     width: (width / 10) * 9,
     paddingLeft: 10,
-    paddingRight: 10
+    paddingRight: 10,
+    paddingBottom: 5,
+    paddingTop: 5
   },
   completed: {
-    backgroundColor: 'green'
+    backgroundColor: '#52de97'
   },
   todoText: {
-    fontSize: 18,
+    fontSize: 22,
+    color: '#1b262c'
   },
   strikeThrough: {
     textDecorationLine: 'line-through'
