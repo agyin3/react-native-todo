@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import * as Animatable from 'react-native-animatable'
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 import { faCheckSquare, faTrash } from '@fortawesome/free-solid-svg-icons'
 import { StyleSheet, Text, View, TextInput, TouchableOpacity, Dimensions } from 'react-native';
@@ -20,7 +21,8 @@ function Todo(props) {
   const handleSubmit = e => {
     props.postData({
       name: newTodo,
-      completed: false
+      completed: false,
+      deleted: false
     })
     setNewTodo('')
   }
@@ -46,13 +48,13 @@ function Todo(props) {
       </View>
       <View style={styles.todos}>
         {props.todos && props.todos.map((todo) => (
-          <View key={todo.id} style={[styles.textContainer, todo.completed ? styles.completed : '']}>
+          <Animatable.View animation={'fadeIn'} key={todo.id} style={[styles.textContainer, todo.completed ? styles.completed : '']}>
             <Text style={[styles.todoText, todo.completed ? styles.strikeThrough : '']}>{todo.name}</Text>
             <View style={styles.iconContainer}>
               <FontAwesomeIcon icon={faCheckSquare} size={24} onPress={() => toggleComplete(todo)} />
-              <FontAwesomeIcon icon={faTrash} size={24} onPress={() => props.removeTask(todo.id)} />
+              <FontAwesomeIcon icon={faTrash} size={24} onPress={() => props.removeTasks(todo.id)} />
             </View>
-          </View>
+          </Animatable.View>
         ))}
       </View>
     </View>
