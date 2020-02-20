@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 import { faCheckSquare, faTrash } from '@fortawesome/free-solid-svg-icons'
 import { StyleSheet, Text, View, TextInput, TouchableOpacity, Dimensions } from 'react-native';
 import { connect } from 'react-redux'
-import { fetchData, postData, toggleComplete } from './actions.js'
+import { fetchData, postData, toggleComplete, removeTask } from './actions.js'
 
 const {height, width} = Dimensions.get('window') // Grab height/width to allow percentage calculations in styling
 function Todo(props) {
@@ -35,6 +35,7 @@ function Todo(props) {
       todo.id
     )
   }
+
   return (
     <View style={styles.container}>
       <View style={styles.inputContainer}>
@@ -49,7 +50,7 @@ function Todo(props) {
             <Text style={[styles.todoText, todo.completed ? styles.strikeThrough : '']}>{todo.name}</Text>
             <View style={styles.iconContainer}>
               <FontAwesomeIcon icon={faCheckSquare} size={24} onPress={() => toggleComplete(todo)} />
-              <FontAwesomeIcon icon={faTrash} size={24} />
+              <FontAwesomeIcon icon={faTrash} size={24} onPress={() => props.removeTask(todo.id)} />
             </View>
           </View>
         ))}
@@ -69,7 +70,8 @@ export default connect(
   {
     fetchData,
     postData,
-    toggleComplete
+    toggleComplete,
+    removeTask
   }
 )(Todo)
 

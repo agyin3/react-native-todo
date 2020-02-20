@@ -44,3 +44,17 @@ export const toggleComplete = (todo, id) => dispatch => {
         dispatch({type: FETCH_POSTS_FAIL})
       })
 } 
+
+export const removeTask = (id) => dispatch => {
+    axios.all([
+        axios.delete(`http://localhost:3000/todos/${id}`),
+        axios.get('http://localhost:3000/todos')
+    ])
+    .then(axios.spread((removed, get) => {
+        console.log(removed)
+        dispatch({type: FETCH_POSTS_COMPLETE, payload: get.data})
+      }))
+      .catch(err => {
+        dispatch({type: FETCH_POSTS_FAIL})
+      })
+}
