@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
+import { faCheckSquare, faTrash } from '@fortawesome/free-solid-svg-icons'
 import { StyleSheet, Text, View, TextInput, TouchableOpacity, Dimensions } from 'react-native';
 import { connect } from 'react-redux'
-import { fetchData } from './actions.js'
-import axios from 'axios'
+import { fetchData, postData, toggleComplete } from './actions.js'
 
-const {height, width} = Dimensions.get('window')
+const {height, width} = Dimensions.get('window') // Grab height/width to allow percentage calculations in styling
 function Todo(props) {
-  const [todos, setTodos] = useState([])
-  const [newTodo, setNewTodo] = useState()
+  const [newTodo, setNewTodo] = useState('')
 
   useEffect(() => {
     props.fetchData()
@@ -17,27 +17,40 @@ function Todo(props) {
     setNewTodo(text)
   }
 
-  const handlePress = e => {
-    axios.post('http://localhost:3000/todos', {
-      name: newTodo
+  const handleSubmit = e => {
+    props.postData({
+      name: newTodo,
+      completed: false
     })
-    .then(res => console.log(res))
-    .catch(err => console.log(err))
-    props.fetchData()
     setNewTodo('')
+  }
+
+  const toggleComplete = (todo) => {
+    props.toggleComplete(
+      {
+        ...todo,
+        completed: !todo.completed
+        
+      },
+      todo.id
+    )
   }
   return (
     <View style={styles.container}>
       <View style={styles.inputContainer}>
         <TextInput style={styles.input} onChangeText={handleChange} value={newTodo} />
-        <TouchableOpacity style={styles.button} onPress={handlePress}>
+        <TouchableOpacity style={styles.button} onPress={handleSubmit}>
           <Text style={styles.buttonText}>Submit</Text>
         </TouchableOpacity>
       </View>
       <View style={styles.todos}>
-        {props.todos && props.todos.map((todo, index) => (
-          <View key={index} style={styles.textContainer}>
-            <Text style={styles.todoText}>{todo.name}</Text>
+        {props.todos && props.todos.map((todo) => (
+          <View key={todo.id} style={[styles.textContainer, todo.completed ? styles.completed : '']}>
+            <Text style={[styles.todoText, todo.completed ? styles.strikeThrough : '']}>{todo.name}</Text>
+            <View style={styles.iconContainer}>
+              <FontAwesomeIcon icon={faCheckSquare} size={24} onPress={() => toggleComplete(todo)} />
+              <FontAwesomeIcon icon={faTrash} size={24} />
+            </View>
           </View>
         ))}
       </View>
@@ -53,7 +66,11 @@ const mapStateToProps = state => {
 
 export default connect(
   mapStateToProps,
-  {fetchData}
+  {
+    fetchData,
+    postData,
+    toggleComplete
+  }
 )(Todo)
 
 const styles = StyleSheet.create({
@@ -96,13 +113,29 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   textContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
     borderBottomWidth: 3,
     borderBottomColor: 'green',
     borderRadius: 5,
     marginBottom: 15,
     width: (width / 10) * 9,
+    paddingLeft: 10,
+    paddingRight: 10
+  },
+  completed: {
+    backgroundColor: 'green'
   },
   todoText: {
     fontSize: 18,
+  },
+  strikeThrough: {
+    textDecorationLine: 'line-through'
+  },
+  iconContainer: {
+    width: (width / 10) * 1.5,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center'
   }
 });
