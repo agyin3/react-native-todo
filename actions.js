@@ -3,6 +3,7 @@ import axios from 'axios'
 export const FETCH_POSTS = 'FETCH_POSTS'
 export const FETCH_POSTS_COMPLETE = 'FETCH_POSTS_COMPLETE'
 export const FETCH_POSTS_FAIL = 'FETCH_POSTS_FAIL'
+export const DELETE_TASK = 'DELETE_TASK'
 
 export const fetchData = () => dispatch => {
     dispatch({type: FETCH_POSTS})
@@ -46,6 +47,7 @@ export const toggleComplete = (todo, id) => dispatch => {
 } 
 
 export const removeTask = (id) => dispatch => {
+    dispatch({type: DELETE_TASK, payload: id})
     axios.all([
         axios.delete(`http://localhost:3000/todos/${id}`),
         axios.get('http://localhost:3000/todos')
