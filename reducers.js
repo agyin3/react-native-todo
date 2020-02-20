@@ -11,7 +11,7 @@ export const todoReducer = (state = initialState, action) => {
         case FETCH_POSTS_COMPLETE:
             return {
                 ...state,
-                todos:[...state.todos, ...action.payload],
+                todos:[...action.payload],
                 isLoading: false
             }
             break;
