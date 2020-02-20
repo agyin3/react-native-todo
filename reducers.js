@@ -1,4 +1,4 @@
-import {FETCH_POSTS, FETCH_POSTS_COMPLETE, FETCH_POSTS_FAIL} from './actions.js'
+import {FETCH_POSTS, FETCH_POSTS_COMPLETE, FETCH_POSTS_FAIL, DELETE_TASK} from './actions.js'
 
 export const todoReducer = (state = initialState, action) => {
     switch (action.type) {
@@ -21,6 +21,12 @@ export const todoReducer = (state = initialState, action) => {
                 isLoading: false
             }
             break;
+        case DELETE_TASK:
+            console.log(action.payload)
+            return{
+                ...state,
+                todos: state.todos.map(todo => todo.id === action.payload ? {...todo, deleted: !todo.deleted} : todo)
+            }
         default:
             return state
             break;
